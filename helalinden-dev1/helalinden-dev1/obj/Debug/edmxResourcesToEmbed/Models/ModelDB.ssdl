@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Araclar">
+    <Key>
+      <PropertyRef Name="AracId" />
+    </Key>
+    <Property Name="AracId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AracAdi" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AracFiyat" Type="int" Nullable="false" />
+    <Property Name="AracAciklama" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AracKatId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Foto">
+    <Key>
+      <PropertyRef Name="FotoId" />
+    </Key>
+    <Property Name="FotoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AracFotoId" Type="int" Nullable="false" />
+    <Property Name="Fotolar" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Kategoriler">
+    <Key>
+      <PropertyRef Name="KategoriId" />
+    </Key>
+    <Property Name="KategoriId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KategoriAd" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Kiralama">
+    <Key>
+      <PropertyRef Name="KiraId" />
+    </Key>
+    <Property Name="KiraId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KiraTarih" Type="datetime" Nullable="false" />
+    <Property Name="KiraSure" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="KiraUyeId" Type="int" Nullable="false" />
+    <Property Name="KiraUcret" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Uyeler">
+    <Key>
+      <PropertyRef Name="UyeId" />
+    </Key>
+    <Property Name="UyeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UyeAdSoyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UyeEposta" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="UyeParola" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="UyeYetki" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Araclar_ToTable">
+    <End Role="Kategoriler" Type="Self.Kategoriler" Multiplicity="1" />
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kategoriler">
+        <PropertyRef Name="KategoriId" />
+      </Principal>
+      <Dependent Role="Araclar">
+        <PropertyRef Name="AracKatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Foto_ToTable">
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="1" />
+    <End Role="Foto" Type="Self.Foto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Araclar">
+        <PropertyRef Name="AracId" />
+      </Principal>
+      <Dependent Role="Foto">
+        <PropertyRef Name="AracFotoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kiralama_ToTable">
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="1" />
+    <End Role="Kiralama" Type="Self.Kiralama" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Araclar">
+        <PropertyRef Name="AracId" />
+      </Principal>
+      <Dependent Role="Kiralama">
+        <PropertyRef Name="KiraUyeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kiralama_ToTable_1">
+    <End Role="Uyeler" Type="Self.Uyeler" Multiplicity="1" />
+    <End Role="Kiralama" Type="Self.Kiralama" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Uyeler">
+        <PropertyRef Name="UyeId" />
+      </Principal>
+      <Dependent Role="Kiralama">
+        <PropertyRef Name="KiraUyeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB01ModelStoreContainer">
+    <EntitySet Name="Araclar" EntityType="Self.Araclar" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Foto" EntityType="Self.Foto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Kategoriler" EntityType="Self.Kategoriler" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Kiralama" EntityType="Self.Kiralama" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Uyeler" EntityType="Self.Uyeler" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Araclar_ToTable" Association="Self.FK_Araclar_ToTable">
+      <End Role="Kategoriler" EntitySet="Kategoriler" />
+      <End Role="Araclar" EntitySet="Araclar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Foto_ToTable" Association="Self.FK_Foto_ToTable">
+      <End Role="Araclar" EntitySet="Araclar" />
+      <End Role="Foto" EntitySet="Foto" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kiralama_ToTable" Association="Self.FK_Kiralama_ToTable">
+      <End Role="Araclar" EntitySet="Araclar" />
+      <End Role="Kiralama" EntitySet="Kiralama" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kiralama_ToTable_1" Association="Self.FK_Kiralama_ToTable_1">
+      <End Role="Uyeler" EntitySet="Uyeler" />
+      <End Role="Kiralama" EntitySet="Kiralama" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

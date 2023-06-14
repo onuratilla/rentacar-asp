@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Araclar">
+    <Key>
+      <PropertyRef Name="AracId" />
+    </Key>
+    <Property Name="AracId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AracAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="AracFiyat" Type="Int32" Nullable="false" />
+    <Property Name="AracAciklama" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="AracKatId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Kategoriler" Relationship="Self.FK_Araclar_ToTable" FromRole="Araclar" ToRole="Kategoriler" />
+    <NavigationProperty Name="Foto" Relationship="Self.FK_Foto_ToTable" FromRole="Araclar" ToRole="Foto" />
+    <NavigationProperty Name="Kiralama" Relationship="Self.FK_Kiralama_ToTable" FromRole="Araclar" ToRole="Kiralama" />
+  </EntityType>
+  <EntityType Name="Foto">
+    <Key>
+      <PropertyRef Name="FotoId" />
+    </Key>
+    <Property Name="FotoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AracFotoId" Type="Int32" Nullable="false" />
+    <Property Name="Fotolar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Araclar" Relationship="Self.FK_Foto_ToTable" FromRole="Foto" ToRole="Araclar" />
+  </EntityType>
+  <EntityType Name="Kategoriler">
+    <Key>
+      <PropertyRef Name="KategoriId" />
+    </Key>
+    <Property Name="KategoriId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KategoriAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Araclar" Relationship="Self.FK_Araclar_ToTable" FromRole="Kategoriler" ToRole="Araclar" />
+  </EntityType>
+  <EntityType Name="Kiralama">
+    <Key>
+      <PropertyRef Name="KiraId" />
+    </Key>
+    <Property Name="KiraId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KiraTarih" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="KiraSure" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="KiraUyeId" Type="Int32" Nullable="false" />
+    <Property Name="KiraUcret" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Araclar" Relationship="Self.FK_Kiralama_ToTable" FromRole="Kiralama" ToRole="Araclar" />
+    <NavigationProperty Name="Uyeler" Relationship="Self.FK_Kiralama_ToTable_1" FromRole="Kiralama" ToRole="Uyeler" />
+  </EntityType>
+  <EntityType Name="Uyeler">
+    <Key>
+      <PropertyRef Name="UyeId" />
+    </Key>
+    <Property Name="UyeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UyeAdSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UyeEposta" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UyeParola" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UyeYetki" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Kiralama" Relationship="Self.FK_Kiralama_ToTable_1" FromRole="Uyeler" ToRole="Kiralama" />
+  </EntityType>
+  <Association Name="FK_Araclar_ToTable">
+    <End Role="Kategoriler" Type="Self.Kategoriler" Multiplicity="1" />
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kategoriler">
+        <PropertyRef Name="KategoriId" />
+      </Principal>
+      <Dependent Role="Araclar">
+        <PropertyRef Name="AracKatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Foto_ToTable">
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="1" />
+    <End Role="Foto" Type="Self.Foto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Araclar">
+        <PropertyRef Name="AracId" />
+      </Principal>
+      <Dependent Role="Foto">
+        <PropertyRef Name="AracFotoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kiralama_ToTable">
+    <End Role="Araclar" Type="Self.Araclar" Multiplicity="1" />
+    <End Role="Kiralama" Type="Self.Kiralama" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Araclar">
+        <PropertyRef Name="AracId" />
+      </Principal>
+      <Dependent Role="Kiralama">
+        <PropertyRef Name="KiraUyeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kiralama_ToTable_1">
+    <End Role="Uyeler" Type="Self.Uyeler" Multiplicity="1" />
+    <End Role="Kiralama" Type="Self.Kiralama" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Uyeler">
+        <PropertyRef Name="UyeId" />
+      </Principal>
+      <Dependent Role="Kiralama">
+        <PropertyRef Name="KiraUyeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB01Entities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Araclar" EntityType="Self.Araclar" />
+    <EntitySet Name="Foto" EntityType="Self.Foto" />
+    <EntitySet Name="Kategoriler" EntityType="Self.Kategoriler" />
+    <EntitySet Name="Kiralama" EntityType="Self.Kiralama" />
+    <EntitySet Name="Uyeler" EntityType="Self.Uyeler" />
+    <AssociationSet Name="FK_Araclar_ToTable" Association="Self.FK_Araclar_ToTable">
+      <End Role="Kategoriler" EntitySet="Kategoriler" />
+      <End Role="Araclar" EntitySet="Araclar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Foto_ToTable" Association="Self.FK_Foto_ToTable">
+      <End Role="Araclar" EntitySet="Araclar" />
+      <End Role="Foto" EntitySet="Foto" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kiralama_ToTable" Association="Self.FK_Kiralama_ToTable">
+      <End Role="Araclar" EntitySet="Araclar" />
+      <End Role="Kiralama" EntitySet="Kiralama" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kiralama_ToTable_1" Association="Self.FK_Kiralama_ToTable_1">
+      <End Role="Uyeler" EntitySet="Uyeler" />
+      <End Role="Kiralama" EntitySet="Kiralama" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
